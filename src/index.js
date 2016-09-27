@@ -1,7 +1,10 @@
 require('./main.css');
-
+Chart = require('chartjs')
 var Elm = require('./Main.elm');
 
-var root  = document.getElementById('root');
 
-Elm.Main.embed(root);
+var app = Elm.Main.fullscreen();
+
+app.ports.chartdata.subscribe(function () {
+
+});
