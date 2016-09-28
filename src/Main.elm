@@ -6,6 +6,7 @@ import Html.Attributes exposing (..)
 import Html.App as App
 import Date exposing (Date)
 import Task
+import ChartView exposing (lineChart)
 
 
 -- model
@@ -57,6 +58,7 @@ type Msg x
     | SaveEntry
     | ToggleDropdown Bool
     | Now Date
+    | Resize Int Int
 
 
 update msg model =
@@ -109,8 +111,8 @@ view model =
                 []
             ]
         , newDropdown model
-        , text <| toString model
-        ,
+        , div [ class "chart-container" ]
+            [ lineChart 100 887 [ 72.5, 73.2, 71.8, 72.8, 74.0, 72.0, 71.0 ] ]
         ]
 
 
