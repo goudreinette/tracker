@@ -5,6 +5,7 @@ import Html.Events exposing (..)
 import Html.Attributes exposing (..)
 import Html.App as App
 import Date exposing (Date)
+import Date.Format exposing (format)
 import Task
 import ChartView exposing (lineChart)
 
@@ -26,7 +27,7 @@ type alias Entry =
 type alias NewDropdown =
     { open : Bool
     , name : Name
-    , date : String
+    , date : Date
     , value : Float
     }
 
@@ -42,12 +43,16 @@ type alias Model =
 -- init
 
 
-newEntry date =
-    Entry date "" 0
+initDate =
+    (Date.fromTime 1475158086)
+
+
+initDropdown =
+    NewDropdown False "" initDate 0
 
 
 init =
-    Model [] (NewDropdown False "" "" 0) 1464 ! [ Task.perform NoOp Now <| Date.now ]
+    Model [] initDropdown 1464 ! [ Task.perform NoOp Now <| Date.now ]
 
 
 
@@ -82,7 +87,7 @@ toggleOpen open newDropdown =
 
 
 setDate date newDropdown =
-    { newDropdown | date = toString date }
+    { newDropdown | date = date }
 
 
 
@@ -114,8 +119,7 @@ view model =
         , newDropdown model
         , div [ class "grid" ] []
         , div [ class "chart-container" ]
-            [ lineChart 300 model.chartHeight [ 20, 30, 70, 40, 10, 90, 60 ]
-
+            [ lineChart 300 model.chartHeight (List.map .value model.entries)
             ]
         ]
 
@@ -130,10 +134,31 @@ newDropdown model =
     in
         div [ class <| "new-dropdown " ++ class' ]
             [ input [ placeholder "Name" ] []
-            , input [ placeholder "Date", value <| model.newDropdown.date ] []
+            , dateInput model.newDropdown.date
             , input [ placeholder "Value" ] []
             , button [] [ text "Add" ]
             ]
+
+
+dateInput date =
+    div [ class "date-input" ]
+        [ numberInput "d" ""
+        , numberInput "m" ""
+        , numberInput "y" ""
+        ]
+
+
+numberInput placeholder' value =
+    input
+        [ placeholder placeholder'
+        , pattern "[0-9]"
+        ]
+        []
+
+
+dateFormat : Date -> String
+dateFormat date =
+    format "%d-%m-%y" date
 
 
 main =

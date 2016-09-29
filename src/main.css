@@ -85,8 +85,25 @@ header #new-entry {
   padding: 10px;
   border: none;
   border: 1px solid #ccc;
-  z-index: 2;
+  z-index: 3;
   width: 150px;
+}
+
+/**
+ * Date input
+ */
+.date-input {
+  width: calc(100% - 10px);
+  display: flex;
+  justify-content: space-between;
+}
+
+.date-input input {
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }
 
 .new-dropdown button {
@@ -123,7 +140,7 @@ header #new-entry {
   height: calc(100% - 150px);
   border-left: 1px dashed #bbb;
   border-bottom: 1px dashed #bbb;
-  z-index: 2;
+  z-index: 1;
 }
 
 svg {

@@ -9,7 +9,7 @@ import Debug exposing (log)
 lineChart : Int -> Float -> List number -> Svg msg
 lineChart xstep height data =
     svg
-        [ width <| toString (xstep * (List.length data - 1))
+        [ width <| toString (xstep * (List.length data))
         ]
         [ polyline
             [ stroke "#0074d9"
@@ -21,10 +21,11 @@ lineChart xstep height data =
         ]
 
 
+
 -- swap first two arguments
-
-
 -- Line
+
+
 plot xstep height data =
     let
         maxVal =
@@ -36,8 +37,6 @@ plot xstep height data =
         -- pixels per unit
         difference =
             maxVal - minVal
-
-
     in
         data
             |> List.indexedMap (plotPoint xstep height minVal difference)
@@ -47,16 +46,27 @@ plot xstep height data =
 
 plotPoint xstep height minVal difference index value =
     let
-        _ = log "difference" difference
-        _ = log "value" value
-        fraction = log "fraction" ((value - minVal) / difference)
-        ypos     = log "ypos" height - fraction * height
-        xpos    =  log "xpos" index *  xstep
-    in
-        (xpos, ypos)
+        _ =
+            log "difference" difference
 
-pointToString (x, y) =
+        _ =
+            log "value" value
+
+        fraction =
+            log "fraction" ((value - minVal) / difference)
+
+        ypos =
+            log "ypos" height - fraction * height
+
+        xpos =
+            log "xpos" index * xstep
+    in
+        ( xpos, ypos )
+
+
+pointToString ( x, y ) =
     toString x ++ "," ++ toString y ++ " "
+
 
 
 -- Grid
