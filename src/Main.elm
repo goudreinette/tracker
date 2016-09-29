@@ -34,6 +34,7 @@ type alias NewDropdown =
 type alias Model =
     { entries : List Entry
     , newDropdown : NewDropdown
+    , chartHeight : Float
     }
 
 
@@ -46,7 +47,7 @@ newEntry date =
 
 
 init =
-    Model [] (NewDropdown False "" "" 0) ! [ Task.perform NoOp Now <| Date.now ]
+    Model [] (NewDropdown False "" "" 0) 1464 ! [ Task.perform NoOp Now <| Date.now ]
 
 
 
@@ -111,8 +112,11 @@ view model =
                 [ text "+" ]
             ]
         , newDropdown model
+        , div [ class "grid" ] []
         , div [ class "chart-container" ]
-            [ lineChart 100 887 [ 72.5, 73.2, 71.8, 72.8, 74.0, 72.0, 71.0 ] ]
+            [ lineChart 300 model.chartHeight [ 20, 30, 70, 40, 10, 90, 60 ]
+
+            ]
         ]
 
 

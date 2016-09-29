@@ -6,10 +6,11 @@ import String
 import Debug exposing (log)
 
 
-lineChart : Int -> Int -> List Float -> Svg msg
+lineChart : Int -> Float -> List number -> Svg msg
 lineChart xstep height data =
     svg
-        [ viewBox "0 0 2200 900" ]
+        [ width <| toString (xstep * (List.length data - 1))
+        ]
         [ polyline
             [ stroke "#0074d9"
             , fill "#eee"
@@ -20,29 +21,42 @@ lineChart xstep height data =
         ]
 
 
+-- swap first two arguments
+
+
+-- Line
 plot xstep height data =
     let
         maxVal =
-            List.maximum data |> Maybe.withDefault 100
+            log "maxVal" (List.maximum data |> Maybe.withDefault 100)
 
         minVal =
-            List.minimum data |> Maybe.withDefault 0
+            log "minVal" (List.minimum data |> Maybe.withDefault 0)
 
         -- pixels per unit
-        ystep =
-            height // maxVal
+        difference =
+            maxVal - minVal
+
+
     in
         data
-            |> List.indexedMap (plotPoint xstep ystep)
+            |> List.indexedMap (plotPoint xstep height minVal difference)
+            |> List.map pointToString
             |> String.join " "
 
 
-plotPoint xstep ystep index value =
+plotPoint xstep height minVal difference index value =
     let
-        x =
-            xstep * index
-
-        y =
-            -ystep * value + 1000
+        _ = log "difference" difference
+        _ = log "value" value
+        fraction = log "fraction" ((value - minVal) / difference)
+        ypos     = log "ypos" height - fraction * height
+        xpos    =  log "xpos" index *  xstep
     in
-        toString x ++ "," ++ toString y
+        (xpos, ypos)
+
+pointToString (x, y) =
+    toString x ++ "," ++ toString y ++ " "
+
+
+-- Grid
