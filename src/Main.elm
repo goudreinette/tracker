@@ -108,7 +108,7 @@ view model =
                         ""
                 , onClick (ToggleDropdown (not model.newDropdown.open))
                 ]
-                []
+                [ text "+" ]
             ]
         , newDropdown model
         , div [ class "chart-container" ]

@@ -20,30 +20,29 @@ lineChart xstep height data =
         ]
 
 
-plot : Int -> Int -> List Float -> String
 plot xstep height data =
     let
         maxVal =
-            List.maximum data |> Maybe.withDefault 1000
+            List.maximum data |> Maybe.withDefault 100
 
+        minVal =
+            List.minimum data |> Maybe.withDefault 0
+
+        -- pixels per unit
         ystep =
-            round <| (toFloat height / maxVal)
-
-        _ =
-            log "ystep" ystep
+            height // maxVal
     in
-        List.map toFloat data
+        data
             |> List.indexedMap (plotPoint xstep ystep)
-            |> log "points"
-            |> List.map pointToString
             |> String.join " "
 
 
-plotPoint : Int -> Int -> Int -> Float -> ( Int, Int )
 plotPoint xstep ystep index value =
-    ( xstep * index, ystep * round value )
+    let
+        x =
+            xstep * index
 
-
-pointToString : ( Int, Int ) -> String
-pointToString ( x, y ) =
-    toString x ++ "," ++ toString y
+        y =
+            -ystep * value + 1000
+    in
+        toString x ++ "," ++ toString y
