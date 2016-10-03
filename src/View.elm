@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
 import Update exposing (..)
-import Model exposing (View(..))
+import Model exposing (View(..), Fact(..))
 
 
 -- view
@@ -13,7 +13,7 @@ import Model exposing (View(..))
 view model =
     div [ class "container" ]
         [ header' model.view
-        , view' model.view
+        , view' model.view model.facts
         ]
 
 
@@ -40,7 +40,7 @@ headerButton label view currentView =
             [ text label ]
 
 
-view' view =
+view' view facts =
     let
         chartClass =
             viewClass Chart view
@@ -53,7 +53,7 @@ view' view =
     in
         main' []
             [ chartView chartClass []
-            , timelineView timelineClass []
+            , timelineView timelineClass facts
             , newFactView newClass Nothing "" ""
             ]
 
@@ -70,7 +70,21 @@ chartView class' facts =
 
 
 timelineView class' facts =
-    div [ class class', id "timeline" ] [ text "Timeline" ]
+    div [ class class', id "timeline" ]
+        (List.map factView facts)
+
+
+factView fact =
+    case fact of
+        Textual fact ->
+            div [ class "fact textual" ]
+                [ text fact.text
+                , text fact.tag
+                ]
+
+        Numeric fact ->
+            div [ class "fact numeric" ]
+                [ text <| toString fact.value ]
 
 
 newFactView class' date label value =
