@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Html.App as App
-import Model exposing (Model, Fact)
+import Model exposing (Model, Fact, View(..))
 import Update exposing (update)
 import View exposing (view)
 
@@ -10,7 +10,7 @@ import View exposing (view)
 
 
 init =
-    Model [] False "" "" Nothing ! []
+    Model [] Chart "" "" Nothing ! []
 
 
 

@@ -1,8 +1,10 @@
 module Update exposing (..)
 
+import Model exposing (..)
+
 
 type Msg
-    = ToggleNew
+    = SwitchView View
     | InputLabel
     | InputValue
     | SaveFact
@@ -10,8 +12,8 @@ type Msg
 
 update msg model =
     case msg of
-        ToggleNew ->
-            { model | showingNewFact = not model.showingNewFact } ! []
+        SwitchView view ->
+            { model | view = view } ! []
 
         _ ->
             model ! []

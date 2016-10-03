@@ -5,7 +5,7 @@ import Date exposing (Date)
 
 type alias Model =
     { facts : List Fact
-    , showingNewFact : Bool
+    , view : View
     , newFactTag : String
     , newFactValue : String
     , currentTime : Maybe Date
@@ -29,3 +29,9 @@ type alias NumericFact =
     , value : Float
     , date : Date
     }
+
+
+type View
+    = Chart
+    | Timeline
+    | New

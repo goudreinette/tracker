@@ -4,6 +4,7 @@ import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
 import Update exposing (..)
+import Model exposing (View(..))
 
 
 -- view
@@ -11,41 +12,73 @@ import Update exposing (..)
 
 view model =
     div [ class "container" ]
-        [ header []
-            [ div [ class "right" ]
-                [ button [ id "chart" ]
-                    [ text "chart" ]
-                , button [ id "timeline" ]
-                    [ text "timeline" ]
-                ]
-            , button
-                [ onClick ToggleNew
-                , id "new-entry"
-                , class <|
-                    if model.showingNewFact then
-                        "active"
-                    else
-                        ""
-                ]
-                [ text "+" ]
-            ]
-        , newFactView model.showingNewFact Nothing "" ""
+        [ header' model.view
+        , view' model.view
         ]
 
 
-newFactView showing date label value =
+header' : View -> Html Msg
+header' view =
+    header []
+        [ div [ class "right" ]
+            [ headerButton "chart" Chart view
+            , headerButton "timeline" Timeline view
+            ]
+        , headerButton "+" New view
+        ]
+
+
+headerButton label view currentView =
     let
         class' =
-            if showing then
-                "show"
+            if view == currentView then
+                "active"
             else
                 ""
     in
-        Html.form [ id "new-fact", class class' ]
-            [ div [ class "inner" ]
-                [ h1 [] [ text "New Fact" ]
-                , input [ placeholder "Tag" ] []
-                , input [ placeholder "Value" ] []
-                , button [] [ text "Add" ]
-                ]
+        button [ id label, onClick (SwitchView view), class class' ]
+            [ text label ]
+
+
+view' view =
+    let
+        chartClass =
+            viewClass Chart view
+
+        timelineClass =
+            viewClass Timeline view
+
+        newClass =
+            viewClass New view
+    in
+        main' []
+            [ chartView chartClass []
+            , timelineView timelineClass []
+            , newFactView newClass Nothing "" ""
             ]
+
+
+viewClass view currentView =
+    if view == currentView then
+        "show"
+    else
+        ""
+
+
+chartView class' facts =
+    div [ class class', id "chart" ] [ text "Chart" ]
+
+
+timelineView class' facts =
+    div [ class class', id "timeline" ] [ text "Timeline" ]
+
+
+newFactView class' date label value =
+    Html.form [ id "new-fact", class class' ]
+        [ div [ class "inner" ]
+            [ h1 [] [ text "New Fact" ]
+            , input [ placeholder "Tag" ] []
+            , input [ placeholder "Value" ] []
+            , button [] [ text "Add" ]
+            ]
+        ]
