@@ -10,5 +10,8 @@ type Msg
 
 update msg model =
     case msg of
+        ToggleNew ->
+            { model | showingNewFact = not model.showingNewFact } ! []
+
         _ ->
             model ! []
